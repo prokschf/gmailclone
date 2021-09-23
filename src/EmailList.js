@@ -1,5 +1,5 @@
 import { Checkbox, IconButton } from '@material-ui/core'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import RedoIcon from '@material-ui/icons/Redo'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
@@ -13,8 +13,16 @@ import LocalOfferIcon from '@material-ui/icons/LocalOffer'
 import "./EmailList.css"
 import Section from './Section'
 import EmailRow from './EmailRow'
+import { db } from './firebase'
 
 function EmailList() {
+    const [emails, setEmails] = useState([]);
+    useEffect(() => {
+        db.collection("emails")
+            .orderBy('timestamp', 'desc')
+            .onSnapshot(snapshot => setEmails(snapshot.docs))
+    }, [])//render once with 2. param
+
     return (
             <div className="emailList">
                 <div className="emailList__settings">
